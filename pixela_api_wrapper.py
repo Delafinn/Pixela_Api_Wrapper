@@ -18,58 +18,67 @@ print(f"Welcome to Pixela Api Wrapper. \nToday is {TODAY.strftime('%A, %B the %d
 input("Press any key to continue!")
 time.sleep(1.2)
 
+new_user_mode = True
 
-try:
-    with open("tokendat.json","r") as file:
-        data = json.load(file)
+while new_user_mode is True:
 
-except FileNotFoundError:
-    time.sleep(1)
-    print("No user data found! \n Running new user mode")
-    new_user_question = input("Do you already have a user account in pixela?").lower()
+    try:
+        with open("tokendat.json","r") as file:
+            data = json.load(file)
 
-    if new_user_question in ("no", "n"):
-        token = input("please create your api token")
-        username = input("please create your username")
-        agreeTermsOfService = input("type yes or no whether you agree to the terms of service.")
-        notMinor = input("Specify yes or no as to whether you are not a minor")
+    except FileNotFoundError:
+        time.sleep(1)
+        print("No user data found! \n Running new user mode")
+        new_user_question = input("Do you already have a user account in pixela?").lower()
 
-        user_data_json = {
-        "token":token,
-        "username":username
-        }
+        if new_user_question in ("no", "n"):
+            token = input("please create your api token")
+            username = input("please create your username")
+            agreeTermsOfService = input("type yes or no whether you agree to the terms of service.")
+            notMinor = input("Specify yes or no as to whether you are not a minor")
 
-        user_data = {
-        "token":token,
-        "username":username,
-        "agreeTermsOfService":agreeTermsOfService,
-        "notMinor": notMinor
-        }
+            user_data_json = {
+            "token":token,
+            "username":username
+            }
 
-        with open("tokendat.json","w") as file:
-            json.dump(user_data_json,file)
+            user_data = {
+            "token":token,
+            "username":username,
+            "agreeTermsOfService":agreeTermsOfService,
+            "notMinor": notMinor
+            }
 
-        response = requests.post(PIXELA_ENDPOINT, json=user_data)
-        response.raise_for_status()
-        print(response.text)
+            with open("tokendat.json","w") as file:
+                json.dump(user_data_json,file)
 
-    elif new_user_question in ("yes", "y"):
-        token = input("please enter your api token")
-        username = input("please enter your username")
-        user_data = {
-        "token":token,
-        "username":username
-        }
-        with open("tokendat.json","w") as file:
-            json.dump(user_data,file)
+            response = requests.post(PIXELA_ENDPOINT, json=user_data)
+            response.raise_for_status()
+            print(response.text)
+            break
 
-else:
-    with open("tokendat.json","r") as file:
-        data = json.load(file)
-        token = data["token"]
-        username = data["username"]
-        # print(token)
-        # print(username)
+        elif new_user_question in ("yes", "y"):
+            token = input("please enter your api token")
+            username = input("please enter your username")
+            user_data = {
+            "token":token,
+            "username":username
+            }
+            with open("tokendat.json","w") as file:
+                json.dump(user_data,file)
+                break
+
+        elif new_user_question not in ("yes","y","no","n"):
+            print("invalid response!")
+            continue
+
+    else:
+        with open("tokendat.json","r") as file:
+            data = json.load(file)
+            token = data["token"]
+            username = data["username"]
+            break
+
 
 
 PIXELA_USER_PROFILE_ENDPOINT = f"https://pixe.la/@{username}"
