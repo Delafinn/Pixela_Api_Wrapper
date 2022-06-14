@@ -4,6 +4,7 @@ import time
 import webbrowser
 import json
 import requests
+import os
 
 now = dt.datetime.now()
 TODAY= now.today()
@@ -29,13 +30,13 @@ while new_user_mode is True:
     except FileNotFoundError:
         time.sleep(1)
         print("No user data found! \n Running new user mode")
-        new_user_question = input("Do you already have a user account in pixela?").lower()
+        new_user_question = input("Do you already have a user account in pixela? ").lower()
 
         if new_user_question in ("no", "n"):
-            token = input("please create your api token")
-            username = input("please create your username")
-            agreeTermsOfService = input("type yes or no whether you agree to the terms of service.")
-            notMinor = input("Specify yes or no as to whether you are not a minor")
+            token = input("please create your api token: ")
+            username = input("please create your username: ")
+            agreeTermsOfService = input("type yes or no whether you agree to the terms of service.: ")
+            notMinor = input("Specify yes or no as to whether you are not a minor: ")
 
             user_data_json = {
             "token":token,
@@ -58,14 +59,18 @@ while new_user_mode is True:
             break
 
         elif new_user_question in ("yes", "y"):
-            token = input("please enter your api token")
-            username = input("please enter your username")
+            token = input("please enter your api token: ")
+            username = input("please enter your username: ")
             user_data = {
             "token":token,
             "username":username
             }
-            with open("tokendat.json","w") as file:
-                json.dump(user_data,file)
+            try:
+                with open("tokendat.json","w") as file:
+                    json.dump(user_data,file)
+                    break
+            except FileNotFoundError:
+                print("User file does not exist. Moving on.")
                 break
 
         elif new_user_question not in ("yes","y","no","n"):
@@ -92,7 +97,7 @@ while True:
 
     print("Select an option (type the corresponding number and press enter)")
     main_menu_selection = input("""1: User Options  \n2: View User Profile
-3: Graph Options \n4: Pixel Options (post to a graph) \n5: Exit """)
+3: Graph Options \n4: Pixel Options (post to a graph) \n5: Exit\n""")
 
     if main_menu_selection not in ("1","2","3","4","5"):
         print("\ninvalid input! \nPlease select a valid input.")
@@ -103,21 +108,21 @@ while True:
 
     elif main_menu_selection in ("1"):
         print("Select an option.")
-        user_submenu_selection = input("1: Update token \n2: Delete user account \n3: Main Menu")
+        user_submenu_selection = input("1: Update token \n2: Delete user account \n3: Main Menu\n")
 
         if user_submenu_selection not in ("1","2","3"):
             print("\ninvalid input! \nPlease select a valid input.")
             continue
 
         elif user_submenu_selection in ("3"):
-            print("Exitting to main menu")
+            print("Exiting to main menu")
             continue
 
         elif user_submenu_selection in ("1"):
             HEADERS = {
                 "X-USER-TOKEN": token
             }
-            new_user_token = input("Please enter your new token")
+            new_user_token = input("Please enter your new token: ")
             user_parameters = {
 
                 "newToken": new_user_token
@@ -134,7 +139,7 @@ while True:
                 json.dump(user_data,file)
 
         elif user_submenu_selection in ("2"):
-            last_chance = input("Are you sure you want to delete your user account? (type yes or no) \nThis action cannot be undone!").lower()
+            last_chance = input("Are you sure you want to delete your user account? (type yes or no) \nThis action cannot be undone! ").lower()
             if last_chance not in ("yes","no"):
                 print("Exiting to main menu")
                 continue
@@ -146,9 +151,13 @@ while True:
                 HEADERS = {
                     "X-USER-TOKEN": token
                 }
-                repsonse = requests.delete(PIXELA_UPDATE_USER_TOKEN_ENDPOINT,headers=HEADERS)
+                response = requests.delete(PIXELA_UPDATE_USER_TOKEN_ENDPOINT,headers=HEADERS)
                 response.raise_for_status()
                 print(response.text)
+                try:
+                    os.remove("tokendat.json")
+                except OSError:
+                    print("Unable to delete tokendat.json")
 
     elif main_menu_selection in ("2"):
         webbrowser.open(url=f"https://pixe.la/@{username}")
