@@ -1,7 +1,7 @@
 # Pixela Api Wrapper
 API wrapper for the habit tracking pixe.la API, Pixe.la allows you to record and track your habits or efforts all by using API.
 
-The README is far from complete. however I am working to get this complete as soon as possible.
+The README is far from complete.. Feel free to send in improvements!
 
 Even if you have an account with pixe.la, the wrapper will still run you through a first time user mode.
 
