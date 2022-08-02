@@ -5,7 +5,7 @@ The README is far from complete.. Feel free to send in improvements!
 
 Even if you have an account with pixe.la, the wrapper will still run you through a first time user mode.
 
-If you already have an account make sure to provide the correct token and username or else your API requests will come back with a bad reqeust errors.
+If you already have an account make sure to provide the correct token and username or else your API requests will come back with bad request errors.
 
 
 # Pixela README
