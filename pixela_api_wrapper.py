@@ -12,8 +12,8 @@ stringftime = TODAY.strftime("%Y%m%d")
 
 PIXELA_ENDPOINT = "https://pixe.la/v1/users"
 
-# for viewing the graph
-# webbrowser.open(url=f"https://pixe.la/@{username}")
+def openwebpage():
+    webbrowser.open(url=f"https://pixe.la/@{username}")
 
 print(f"Welcome to Pixela Api Wrapper. \nToday is {TODAY.strftime('%A, %B the %dth')}")
 input("Press any key to continue!")
@@ -88,11 +88,13 @@ while new_user_mode is True:
 
 PIXELA_USER_PROFILE_ENDPOINT = f"https://pixe.la/@{username}"
 PIXELA_UPDATE_USER_TOKEN_ENDPOINT = f"https://pixe.la/v1/users/{username}"
+
 HEADERS = {
     "X-USER-TOKEN": token
 }
 
 GRAPH_ENDPOINT = f"{PIXELA_UPDATE_USER_TOKEN_ENDPOINT}/graphs"
+
 while True:
 
     print("Select an option (type the corresponding number and press enter)")
@@ -160,7 +162,7 @@ while True:
                     print("Unable to delete tokendat.json")
 
     elif main_menu_selection in ("2"):
-        webbrowser.open(url=f"https://pixe.la/@{username}")
+        openwebpage()
 
     elif main_menu_selection in ("3"):
         print("Please Select a graph option!")
